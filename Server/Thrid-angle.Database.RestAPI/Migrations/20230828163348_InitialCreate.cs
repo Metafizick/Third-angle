@@ -6,11 +6,23 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Thrid_angle.Database.RestAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class NewMigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "AuthorsCard",
+                columns: table => new
+                {
+                    IdAuthor = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Author = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AuthorsCard", x => x.IdAuthor);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Baskets",
                 columns: table => new
@@ -53,6 +65,35 @@ namespace Thrid_angle.Database.RestAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GenreCards",
+                columns: table => new
+                {
+                    IdGenreCard = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Genre = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GenreCards", x => x.IdGenreCard);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NewsCard",
+                columns: table => new
+                {
+                    IdNewsCard = table.Column<Guid>(type: "TEXT", nullable: false),
+                    HeadlineNews = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
+                    ContentNews = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
+                    NewsText = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: false),
+                    PhotoNumber = table.Column<int>(type: "INTEGER", maxLength: 8, nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "TEXT", maxLength: 100, nullable: false),
+                    UpdateDate = table.Column<DateTime>(type: "TEXT", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NewsCard", x => x.IdNewsCard);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OrderCard",
                 columns: table => new
                 {
@@ -76,6 +117,7 @@ namespace Thrid_angle.Database.RestAPI.Migrations
                     QuoteTitle = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
                     QuoteText = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: false),
                     QuoteAutor = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", maxLength: 4, nullable: false),
                     DateCreationQuote = table.Column<DateTime>(type: "TEXT", maxLength: 100, nullable: false),
                     DateUpdateQuote = table.Column<DateTime>(type: "TEXT", maxLength: 100, nullable: false)
                 },
@@ -129,10 +171,19 @@ namespace Thrid_angle.Database.RestAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AuthorsCard");
+
+            migrationBuilder.DropTable(
                 name: "Baskets");
 
             migrationBuilder.DropTable(
                 name: "BookCard");
+
+            migrationBuilder.DropTable(
+                name: "GenreCards");
+
+            migrationBuilder.DropTable(
+                name: "NewsCard");
 
             migrationBuilder.DropTable(
                 name: "OrderCard");

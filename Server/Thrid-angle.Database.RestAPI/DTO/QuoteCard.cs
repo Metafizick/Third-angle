@@ -16,6 +16,7 @@ namespace Thrid_angle.Database.RestAPI.DTO
         public string QuoteTitle { get; set; }
         public string QuoteText { get; set; }
         public string QuoteAutor { get; set; }
+        public bool IsActive { get; set; }
         public DateTime? DateCreationQuote { get; set; }
         public DateTime? DateUpdateQuote { get; set; }
 

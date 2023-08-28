@@ -10,7 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Thrid_angle.Database.RestAPI.DTO;
 using Thrid_angle.Database.RestAPI.Mehtods;
-using System.Reflection.Metadata.Ecma335;   
+using System.Reflection.Metadata.Ecma335;
+using Microsoft.Extensions.DependencyInjection;
 
 
 namespace Thrid_angle.Database.RestAPI.ControllersREST
@@ -24,9 +25,12 @@ namespace Thrid_angle.Database.RestAPI.ControllersREST
         MethodsEntityFrameworcSQLite methodsEntityFrameworcSQLite;
        static  HelperMethodsDatabase helperMethodsDatabase = new HelperMethodsDatabase();
 
-        public ServicesRest()
+        //IServiceCollection Services;
+
+        public ServicesRest(IServiceProvider _services)
         {
-           // helperMethodsDatabase = _helperMethodsDatabase;
+
+            methodsEntityFrameworcSQLite = (MethodsEntityFrameworcSQLite) _services.GetService<IMethodsEntityFrameworcSQLite>();
 
              methodsEntityFrameworcSQLite = new MethodsEntityFrameworcSQLite();
             
@@ -57,7 +61,7 @@ namespace Thrid_angle.Database.RestAPI.ControllersREST
             _baskets.DateUbdateBasket = DateTime.Now;
 
 
-             methodsEntityFrameworcSQLite.CreateDatabaseBaskets(_baskets);
+            methodsEntityFrameworcSQLite.CreateDatabaseBaskets(_baskets);
 
 
 
@@ -80,10 +84,12 @@ namespace Thrid_angle.Database.RestAPI.ControllersREST
             bookCard.DateCreationBook = DateTime.Now;
             bookCard.DateUpdateBook = DateTime.Now;
 
-
             methodsEntityFrameworcSQLite.CreateDatabaseBookCard(bookCard);
 
-            
+
+
+
+
 
         }
 
@@ -91,8 +97,8 @@ namespace Thrid_angle.Database.RestAPI.ControllersREST
        
 
         //ServicesRest/CreateDatabaseQuoteCard/{QuoteTitle}/{QuoteText}/{QuoteAutor}
-        [HttpGet("{QuoteTitle}/{QuoteText}/{QuoteAutor}")]
-        public void CreateDatabaseQuoteCard([FromRoute] string QuoteTitle, [FromRoute] string QuoteText, [FromRoute] string QuoteAutor)
+        [HttpGet("{QuoteTitle}/{QuoteText}/{QuoteAutor}/{IsActive}")]
+        public void CreateDatabaseQuoteCard([FromRoute] string QuoteTitle, [FromRoute] string QuoteText, [FromRoute] string QuoteAutor, [FromRoute] bool IsActive)
         {
 
            QuoteCard quoteCard = new QuoteCard();
@@ -100,12 +106,14 @@ namespace Thrid_angle.Database.RestAPI.ControllersREST
             quoteCard.QuoteTitle = QuoteTitle;
             quoteCard.QuoteText = QuoteText;
             quoteCard.QuoteAutor = QuoteAutor;
+            quoteCard.IsActive = IsActive;
             quoteCard.DateCreationQuote = DateTime.Now;
             quoteCard.DateUpdateQuote = DateTime.Now;
 
+
             methodsEntityFrameworcSQLite.CreateDatabaseQuoteCard(quoteCard);
 
-            
+
         }
 
 
@@ -123,9 +131,10 @@ namespace Thrid_angle.Database.RestAPI.ControllersREST
             requestCard.DateRequestCreation = DateTime.Now;
             requestCard.DateRequestUpdation = DateTime.Now;
 
+
             methodsEntityFrameworcSQLite.CreateDatabaseRequestCard(requestCard);
 
-            
+
         }
 
 
@@ -151,13 +160,38 @@ namespace Thrid_angle.Database.RestAPI.ControllersREST
 
             methodsEntityFrameworcSQLite.CreateDatabaseUserCard(userCard);
 
-            Console.WriteLine(userCard.AddressUser);
-            
+
+
 
         }
 
-        //ServicesRest/IDReadDatabaseBaskets/{IdBasket} - метод удален
-     
+        [HttpGet("{HeadlineNews}/{ContentNews}/{NewsText}/{PhotoNumber}")]
+        public void CreateDatabaseNewsCard([FromRoute] string HeadlineNews, [FromRoute] string ContentNews, [FromRoute] string NewsText, [FromRoute] int? PhotoNumber=0)
+        {
+            NewsCard newsCard = new NewsCard();
+
+            newsCard.HeadlineNews = HeadlineNews;
+            newsCard.ContentNews = ContentNews;
+            newsCard.NewsText = NewsText;
+            newsCard.PhotoNumber = PhotoNumber;
+            newsCard.CreationDate = DateTime.Now;
+            newsCard.UpdateDate = DateTime.Now;
+
+            methodsEntityFrameworcSQLite.CreateDatabaseNewsCard(newsCard);
+
+           
+
+
+
+        }
+
+
+
+
+
+
+
+
 
         //ServicesRest/IDReadDatabaseBookCard/{IdBook}
         [HttpGet("{IdBook}")]
@@ -194,6 +228,20 @@ namespace Thrid_angle.Database.RestAPI.ControllersREST
             return userCard;
 
         }
+
+        [HttpGet("{IdNewsCard}")]
+        public NewsCard IDReadDatabaseNewsCard([FromRoute] Guid IdNewsCard)
+        {
+
+            NewsCard newsCard = methodsEntityFrameworcSQLite.IDReadDatabaseNewsCard(IdNewsCard);
+            return newsCard;
+
+
+        }
+
+
+
+
         //ServicesRest/UpdateDatabaseBaskets/{IdBasket}/{QuantityBooks}/{PricePerBook}
         [HttpGet("{IdBasket}/{QuantityBooks}/{PricePerBook}")]
         public void UpdateDatabaseBaskets([FromRoute] Guid IdBasket, [FromRoute] int QuantityBooks, [FromRoute] int PricePerBook)
@@ -250,8 +298,8 @@ namespace Thrid_angle.Database.RestAPI.ControllersREST
        }
 
         //ServicesRest/UpdateDatabaseQuoteCard/{IdQuote}/{QuoteTitle}/{QuoteText}/{QuoteAutor}
-        [HttpGet("{IdQuote}/{QuoteTitle}/{QuoteText}/{QuoteAutor}")]
-       public void UpdateDatabaseQuoteCard([FromRoute] Guid IdQuote, [FromRoute] string QuoteTitle, [FromRoute] string QuoteText, [FromRoute] string QuoteAutor)
+        [HttpGet("{IdQuote}/{QuoteTitle}/{QuoteText}/{QuoteAutor}/{IsActive}")]
+       public void UpdateDatabaseQuoteCard([FromRoute] Guid IdQuote, [FromRoute] string QuoteTitle, [FromRoute] string QuoteText, [FromRoute] string QuoteAutor, [FromRoute] bool IsActive)
        {
            QuoteCard quoteCard = new QuoteCard();
 
@@ -259,6 +307,7 @@ namespace Thrid_angle.Database.RestAPI.ControllersREST
             quoteCard.QuoteTitle = QuoteTitle;
             quoteCard.QuoteText = QuoteText;
             quoteCard.QuoteAutor = QuoteAutor;
+            quoteCard.IsActive = IsActive;
             quoteCard.DateUpdateQuote = DateTime.Now;   
 
             methodsEntityFrameworcSQLite.UpdateDatabaseQuoteCard(quoteCard);
@@ -305,6 +354,27 @@ namespace Thrid_angle.Database.RestAPI.ControllersREST
            
           
        }
+
+        [HttpGet("{HeadlineNews}/{ContentNews}/{NewsText}/{PhotoNumber}")]
+        public void UpdateDatabaseNewsCard([FromRoute] string HeadlineNews, [FromRoute] string ContentNews, [FromRoute] string NewsText, [FromRoute] int? PhotoNumber=0 )
+        {
+            NewsCard newsCard = new NewsCard();
+
+            newsCard.HeadlineNews = HeadlineNews;
+             newsCard.ContentNews = ContentNews;
+             newsCard.NewsText = ContentNews;
+            newsCard.PhotoNumber = PhotoNumber;
+            newsCard.CreationDate = DateTime.Now;
+             newsCard.UpdateDate = DateTime.Now;
+
+            methodsEntityFrameworcSQLite.UpdateDatabaseNewsCard(newsCard);
+
+
+    }
+
+
+
+
         //ServicesRest/DeleteDatabaseBaskets/{IdBasket} -  удаляет из таблици корзины записи отмечены в поле StatusOrderCard - как basket ***
         [HttpGet("{IdBasket}")]
        public void DeleteDatabaseBaskets([FromRoute] Guid IdBasket)
@@ -356,6 +426,17 @@ namespace Thrid_angle.Database.RestAPI.ControllersREST
             methodsEntityFrameworcSQLite.DeleteDatabaseUserCard(IdUser);
           
         }
+
+        [HttpGet("{IdNewsCard}")]
+        public void DeleteDatabaseNewsCard(Guid IdNewsCard)
+        {
+            methodsEntityFrameworcSQLite.DeleteDatabaseNewsCard(IdNewsCard);
+
+
+
+        }
+
+
 
 
         // UserReadDatabaseBaskets/{IdUser} - читате содержание корзины по IdUser  и полю StatusOrderCard  со значением basket ****
@@ -446,6 +527,59 @@ namespace Thrid_angle.Database.RestAPI.ControllersREST
 
 
         }
+
+
+
+
+        [HttpGet()]
+        public IEnumerable<Baskets> ReadDatabaseBascets() { List<Baskets> baskets = methodsEntityFrameworcSQLite.ReadDatabaseBascets(); foreach (Baskets baskets1 in baskets) { yield return baskets1; }; }
+        [HttpGet()]
+        public IEnumerable<Baskets> ReadDatabaseQuoteCard() { List<Baskets> _quoteCard = methodsEntityFrameworcSQLite.ReadDatabaseQuoteCard(); foreach (Baskets _quoteCard1 in _quoteCard) { yield return _quoteCard1; }; }
+        [HttpGet()]
+        public IEnumerable<RequestCard> ReadDatabaseRequestCard() { List<RequestCard> _requestCard = methodsEntityFrameworcSQLite.ReadDatabaseRequestCard(); foreach (RequestCard _requestCard1 in _requestCard) { yield return _requestCard1; }; }
+        [HttpGet()]
+        public IEnumerable<UserCard> ReadDatabaseUserCard() { List<UserCard> _userCard = methodsEntityFrameworcSQLite.ReadDatabaseUserCard(); foreach (UserCard _userCard1 in _userCard) { yield return _userCard1; }; }
+        [HttpGet()]
+        public IEnumerable<NewsCard> ReadDatabaseNewsCard() { List<NewsCard> _newsCard = methodsEntityFrameworcSQLite.ReadDatabaseNewsCard(); foreach (NewsCard _newsCard1 in _newsCard) { yield return _newsCard1; }; }
+
+
+
+        [HttpGet("{Genre}")]
+        public void CreateDatabaseGenreCards([FromRoute]  String Genre) { methodsEntityFrameworcSQLite.CreateDatabaseGenreCards(new GenreCards { Genre = Genre }); }
+
+        [HttpGet("{Author}")]
+        public void CreateDatabaseAuthorsCard([FromRoute] string Author) { methodsEntityFrameworcSQLite.CreateDatabaseAuthorsCard(new AuthorsCard { Author = Author }); }
+
+        [HttpGet()]
+        public IEnumerable<GenreCards> ReadDatabaseGenreCards() { List<GenreCards> _genreCard = methodsEntityFrameworcSQLite.ReadDatabaseGenreCards(); foreach (GenreCards _newsCard1 in _genreCard) { yield return _newsCard1; } }
+
+        [HttpGet()]
+        public IEnumerable<AuthorsCard> ReadDatabaseAuthorsCard() { List<AuthorsCard> _authorsCard = methodsEntityFrameworcSQLite.ReadDatabaseAuthorsCard(); foreach (AuthorsCard _authorsCard1 in _authorsCard) { yield return _authorsCard1; } }
+
+        [HttpGet("{Id}")]
+        public GenreCards IDReadDatabaseGenreCards([FromRoute] Guid Id) { GenreCards t = methodsEntityFrameworcSQLite.IDReadDatabaseGenreCards(Id); return t; }
+
+        [HttpGet("{Id}")]
+        public AuthorsCard IDReadDatabaseAuthorsCard([FromRoute] Guid Id) { AuthorsCard t = methodsEntityFrameworcSQLite.IDReadDatabaseAuthorsCard(Id); return t; }
+
+        [HttpGet("{IdGenreCard}/{Genre}")]
+        public void UpdateDatabaseGenreCards([FromRoute] Guid IdGenreCard, [FromRoute] String Genre) { methodsEntityFrameworcSQLite.UpdateDatabaseGenreCards(new GenreCards() { IdGenreCard = IdGenreCard, Genre = Genre });  }
+
+        [HttpGet("{IdAuthor}/{Author}")]
+        public void UpdateDatabaseAuthorsCard([FromRoute] Guid IdAuthor, [FromRoute] string Author ) { methodsEntityFrameworcSQLite.UpdateDatabaseAuthorsCard(new AuthorsCard() { IdAuthor = IdAuthor, Author = Author }); }
+
+
+        [HttpGet("{Id}")]
+        public void DeleteDatabaseGenreCards([FromRoute] Guid Id) { methodsEntityFrameworcSQLite.DeleteDatabaseGenreCards(Id); }
+
+        [HttpGet("{Id}")]
+        public void DeleteDatabaseAuthorsCard([FromRoute] Guid Id) { methodsEntityFrameworcSQLite.DeleteDatabaseAuthorsCard(Id); }
+
+
+
+
+
+
 
 
 
