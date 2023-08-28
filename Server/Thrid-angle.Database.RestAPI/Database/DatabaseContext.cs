@@ -18,6 +18,9 @@ namespace Thrid_angle.Database.RestAPI.Database
         public DbSet<QuoteCard> DbQuoteCard { get; set; } 
         public DbSet<RequestCard> DbRequestCard { get; set; }
         public DbSet<UserCard> DbUserCard { get; set; }
+        public DbSet<NewsCard> DbNewsCard { get; set; }
+        public DbSet<AuthorsCard> DbAuthorsCard { get; set; }
+        public DbSet<GenreCards> DbGenreCards { get; set; }
 
         public string DbPath { get; }
 
@@ -38,12 +41,14 @@ namespace Thrid_angle.Database.RestAPI.Database
             modelBuilder.Entity<Baskets>().HasKey(b => b.IdBasket);
             modelBuilder.Entity<Baskets>().Property(b=>b.IdUser).IsRequired().HasMaxLength(50);
             modelBuilder.Entity<Baskets>().Property(b => b.IdBook).IsRequired().HasMaxLength(50);
-            modelBuilder.Entity<Baskets>().Property(b => b.QuantityBooks).IsRequired().HasMaxLength(10);
+            modelBuilder.Entity<Baskets>().Property(b => b.NumberOrderCard).IsRequired().HasMaxLength(50);
+            modelBuilder.Entity<Baskets>().Property(b => b.StatusOrderCard).IsRequired().HasMaxLength(50);
+            modelBuilder.Entity<Baskets>().Property(b => b.NumberCard).IsRequired().HasMaxLength(4); 
+             modelBuilder.Entity<Baskets>().Property(b => b.QuantityBooks).IsRequired().HasMaxLength(10);
             modelBuilder.Entity<Baskets>().Property(b => b.PricePerBook).IsRequired().HasMaxLength(10);
             modelBuilder.Entity<Baskets>().Property(b => b.DateCreationBasket).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<Baskets>().Property(b => b.DateUbdateBasket).IsRequired().HasMaxLength(100);
 
-        
             modelBuilder.Entity<OrderCard>().HasKey(b => b.IdOrder);
             modelBuilder.Entity<OrderCard>().Property(b=>b.OrderCardBooksList).IsRequired().HasMaxLength(300);
             modelBuilder.Entity<OrderCard>().Property(b => b.DateCreationOrderCard).IsRequired().HasMaxLength(100);
@@ -82,6 +87,7 @@ namespace Thrid_angle.Database.RestAPI.Database
             modelBuilder.Entity<QuoteCard>().Property(b => b.QuoteTitle).IsRequired().HasMaxLength(200);
             modelBuilder.Entity<QuoteCard>().Property(b => b.QuoteText).IsRequired().HasMaxLength(1000);
             modelBuilder.Entity<QuoteCard>().Property(b => b.QuoteAutor).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<QuoteCard>().Property(b => b.IsActive).IsRequired().HasMaxLength(4);
             modelBuilder.Entity<QuoteCard>().Property(b => b.DateCreationQuote).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<QuoteCard>().Property(b => b.DateUpdateQuote).IsRequired().HasMaxLength(100);
 
@@ -102,10 +108,37 @@ namespace Thrid_angle.Database.RestAPI.Database
 
 
 
+
+            modelBuilder.Entity<NewsCard>().HasKey(b => b.IdNewsCard);
+            modelBuilder.Entity<NewsCard>().Property(b => b.HeadlineNews).IsRequired().HasMaxLength(150);
+            modelBuilder.Entity<NewsCard>().Property(b => b.ContentNews).IsRequired().HasMaxLength(200);
+            modelBuilder.Entity<NewsCard>().Property(b => b.NewsText).IsRequired().HasMaxLength(1000);
+            modelBuilder.Entity<NewsCard>().Property(b => b.PhotoNumber).IsRequired().HasMaxLength(8);
+            modelBuilder.Entity<NewsCard>().Property(b => b.CreationDate).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<NewsCard>().Property(b => b.UpdateDate).IsRequired().HasMaxLength(100);
+
+
+            modelBuilder.Entity<AuthorsCard>().HasKey(b => b.IdAuthor);
+            modelBuilder.Entity<AuthorsCard>().Property(b => b.Author).IsRequired().HasMaxLength(100);
+
+            modelBuilder.Entity<GenreCards>().HasKey(b => b.IdGenreCard);
+            modelBuilder.Entity<GenreCards>().Property(b => b.Genre).IsRequired().HasMaxLength(150);
+
+
+
+        }
+
+
+
+
+
+
+
+
     }
 
 
     } 
 
-}
+
 

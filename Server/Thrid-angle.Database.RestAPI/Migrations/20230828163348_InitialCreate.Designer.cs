@@ -11,7 +11,7 @@ using Thrid_angle.Database.RestAPI.Database;
 namespace Thrid_angle.Database.RestAPI.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230728140200_InitialCreate")]
+    [Migration("20230828163348_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -19,6 +19,22 @@ namespace Thrid_angle.Database.RestAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.9");
+
+            modelBuilder.Entity("Thrid_angle.Database.RestAPI.DTO.AuthorsCard", b =>
+                {
+                    b.Property<Guid>("IdAuthor")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("IdAuthor");
+
+                    b.ToTable("AuthorsCard");
+                });
 
             modelBuilder.Entity("Thrid_angle.Database.RestAPI.DTO.Baskets", b =>
                 {
@@ -46,6 +62,16 @@ namespace Thrid_angle.Database.RestAPI.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("NumberCard")
+                        .IsRequired()
+                        .HasMaxLength(4)
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("NumberOrderCard")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
                     b.Property<int?>("PricePerBook")
                         .IsRequired()
                         .HasMaxLength(10)
@@ -55,6 +81,11 @@ namespace Thrid_angle.Database.RestAPI.Migrations
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("StatusOrderCard")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("IdBasket");
 
@@ -122,6 +153,61 @@ namespace Thrid_angle.Database.RestAPI.Migrations
                     b.ToTable("BookCard");
                 });
 
+            modelBuilder.Entity("Thrid_angle.Database.RestAPI.DTO.GenreCards", b =>
+                {
+                    b.Property<Guid>("IdGenreCard")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Genre")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("IdGenreCard");
+
+                    b.ToTable("GenreCards");
+                });
+
+            modelBuilder.Entity("Thrid_angle.Database.RestAPI.DTO.NewsCard", b =>
+                {
+                    b.Property<Guid>("IdNewsCard")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ContentNews")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("HeadlineNews")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NewsText")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("PhotoNumber")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("UpdateDate")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("IdNewsCard");
+
+                    b.ToTable("NewsCard");
+                });
+
             modelBuilder.Entity("Thrid_angle.Database.RestAPI.DTO.OrderCard", b =>
                 {
                     b.Property<Guid>("IdOrder")
@@ -173,6 +259,10 @@ namespace Thrid_angle.Database.RestAPI.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasMaxLength(4)
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("QuoteAutor")
                         .IsRequired()
